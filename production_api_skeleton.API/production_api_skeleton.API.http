@@ -1,0 +1,6 @@
+@production_api_skeleton.API_HostAddress = http://localhost:5095
+
+GET {{production_api_skeleton.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
