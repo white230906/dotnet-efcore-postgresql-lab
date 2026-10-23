@@ -1,67 +1,73 @@
 ﻿using System.Collections.Concurrent;
 using Microsoft.Extensions.Options;
 using production_api_skeleton.Contract.WorkItems;
+using production_api_skeleton.Domain.Abstractions.Repositories;
 using production_api_skeleton.Domain.WorkItems;
 
 namespace production_api_skeleton.Application.WorkItems;
 
 public class Service: IService
 {
- 
-    private readonly ConcurrentDictionary<Guid, WorkItem> _items = new();
+    private readonly IWorkItemRepository _repository; 
+    private readonly IUnitOfWork _unitOfWork; 
     private readonly WorkItemOptions _options;
     
-    public Service(IOptions<WorkItemOptions> options)
+    public Service(IOptions<WorkItemOptions> options, IWorkItemRepository repository, IUnitOfWork unitOfWork)
     {
         ArgumentNullException.ThrowIfNull(options);
         _options = options.Value;
+        _repository = repository; 
+        _unitOfWork = unitOfWork; 
     }
     
-    public IReadOnlyCollection<Response.WorkItemResponse> GetAll()
-    {
-        return _items.Values
-            .OrderByDescending(item => item.CreatedAt)
+    public async Task<IReadOnlyCollection<Response.WorkItemResponse>> GetAllAsync(CancellationToken cancellationToken) 
+    { 
+        var items = await _repository.GetAllAsync(cancellationToken);
+
+        return items
             .Select(ToResponse)
-            .ToArray();
+            .ToList();
     }
 
-    public Response.WorkItemResponse? GetById(Guid id)
+    public async Task<Response.WorkItemResponse?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return _items.TryGetValue(id, out var item)
-            ? ToResponse(item)
-            : null;
+        var item = await _repository.GetByIdAsync(id, trackChanges: false, cancellationToken);
+        
+        return item is null ? null : ToResponse(item);
     }
 
-    public Response.WorkItemResponse Create(Request.CreateWorkItemRequest request)
+    public async Task<Response.WorkItemResponse> CreateAsync (Request.CreateWorkItemRequest request, CancellationToken cancellationToken)
     {
         var item = WorkItem.Create(
             request.Title,
             _options.MaxTitleLength,
             DateTimeOffset.UtcNow);
  
-        if (!_items.TryAdd(item.Id, item))
-        {
-            throw new InvalidOperationException(
-                "Could not store the work item.");
-        }
+        await _repository.AddAsync(item, cancellationToken);
+        
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
  
         return ToResponse(item);
     }
 
-    public Response.WorkItemResponse? UpdateStatus(Guid id, Request.UpdateWorkItemStatusRequest request)
+    public async Task<Response.WorkItemResponse?> UpdateStatusAsync (Guid id, Request.UpdateWorkItemStatusRequest request, CancellationToken cancellationToken)
     {
-        if (!_items.TryGetValue(id, out var item))
+        
+        var item = await _repository.GetByIdAsync(id, trackChanges: true, cancellationToken);
+
+        if (item is null)
         {
             return null;
         }
  
         var newStatus = ToDomainStatus(request.Status);
- 
-        lock (item)
-        {
-            item.ChangeStatus(newStatus);
-            return ToResponse(item);
-        }
+        
+        item.ChangeStatus(newStatus);
+        
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        
+        return ToResponse(item);
+        
     }
     
     private static WorkItemStatus ToDomainStatus(

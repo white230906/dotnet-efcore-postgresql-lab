@@ -4,8 +4,11 @@ namespace production_api_skeleton.Application.WorkItems;
 
 public interface IService
 {
-    IReadOnlyCollection<Response.WorkItemResponse> GetAll();
-    Response.WorkItemResponse? GetById(Guid id);
-    Response.WorkItemResponse Create(Request.CreateWorkItemRequest request);
-    Response.WorkItemResponse? UpdateStatus(Guid id, Request.UpdateWorkItemStatusRequest request);
+    Task<IReadOnlyCollection<Response.WorkItemResponse>> GetAllAsync(CancellationToken cancellationToken); 
+ 
+    Task<Response.WorkItemResponse?> GetByIdAsync(Guid id, CancellationToken cancellationToken); 
+ 
+    Task<Response.WorkItemResponse> CreateAsync(Request.CreateWorkItemRequest request, CancellationToken cancellationToken); 
+ 
+    Task<Response.WorkItemResponse?> UpdateStatusAsync(Guid id, Request.UpdateWorkItemStatusRequest request, CancellationToken cancellationToken);
 }
