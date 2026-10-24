@@ -469,8 +469,8 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/aspnetcore,dotnetcore,windows,rider,intellij
-production_api_skeleton.Api/appsettings.json
-production_api_skeleton.Api/appsettings.Development.json
+dotnet-efcore-postgresql-lab.Api/appsettings.json
+dotnet-efcore-postgresql-lab.Api/appsettings.Development.json
 
 # Docker local environment (keep .env.sample, ignore real secrets)
 .docker/.env

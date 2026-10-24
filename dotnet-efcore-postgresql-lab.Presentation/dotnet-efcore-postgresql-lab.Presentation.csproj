@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <RootNamespace>DotNetEfCorePostgreSqlLab.Presentation</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+        <PackageReference Include="Carter" Version="8.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\dotnet-efcore-postgresql-lab.Application\dotnet-efcore-postgresql-lab.Application.csproj" />
+      <ProjectReference Include="..\dotnet-efcore-postgresql-lab.Contract\dotnet-efcore-postgresql-lab.Contract.csproj" />
+    </ItemGroup>
+    
+    
+</Project>

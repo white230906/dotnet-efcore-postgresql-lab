@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <RootNamespace>DotNetEfCorePostgreSqlLab.Api</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Asp.Versioning.Http"
+                          Version="8.1.0" />
+
+        <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer"
+                          Version="8.1.0" />
+
+        <PackageReference Include="Carter"
+                          Version="8.1.0" />
+
+        <PackageReference Include="Serilog.AspNetCore"
+                          Version="8.0.2" />
+
+        <PackageReference Include="Swashbuckle.AspNetCore"
+                          Version="8.1.1" />
+
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design"
+                          Version="8.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Controller\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\dotnet-efcore-postgresql-lab.Application\dotnet-efcore-postgresql-lab.Application.csproj" />
+
+        <ProjectReference Include="..\dotnet-efcore-postgresql-lab.Persistence\dotnet-efcore-postgresql-lab.Persistence.csproj" />
+
+        <ProjectReference Include="..\dotnet-efcore-postgresql-lab.Presentation\dotnet-efcore-postgresql-lab.Presentation.csproj" />
+    </ItemGroup>
+
+</Project>

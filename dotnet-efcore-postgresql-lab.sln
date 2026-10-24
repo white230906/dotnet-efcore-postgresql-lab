@@ -1,0 +1,52 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-efcore-postgresql-lab.Api", "dotnet-efcore-postgresql-lab.Api\dotnet-efcore-postgresql-lab.Api.csproj", "{C43F6558-FCAC-47F1-A8AC-FAC1F6FDCC2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-efcore-postgresql-lab.Presentation", "dotnet-efcore-postgresql-lab.Presentation\dotnet-efcore-postgresql-lab.Presentation.csproj", "{20D0EEE4-B136-4750-851F-2B14EB23C746}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-efcore-postgresql-lab.Application", "dotnet-efcore-postgresql-lab.Application\dotnet-efcore-postgresql-lab.Application.csproj", "{D6344E2B-4E1A-4D01-9188-F423D7B75140}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-efcore-postgresql-lab.Domain", "dotnet-efcore-postgresql-lab.Domain\dotnet-efcore-postgresql-lab.Domain.csproj", "{9B8C5B0F-08DD-4461-BA1A-093CC2AE76CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-efcore-postgresql-lab.Contract", "dotnet-efcore-postgresql-lab.Contract\dotnet-efcore-postgresql-lab.Contract.csproj", "{4D5D95DD-D0B2-4A4B-B1C9-76B8C1BAC6F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-efcore-postgresql-lab.Api.IntegrationTests", "dotnet-efcore-postgresql-lab.Api.IntegrationTests\dotnet-efcore-postgresql-lab.Api.IntegrationTests.csproj", "{7FAB9DC6-F1A4-413C-B36B-95632C84A4D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-efcore-postgresql-lab.Persistence", "dotnet-efcore-postgresql-lab.Persistence\dotnet-efcore-postgresql-lab.Persistence.csproj", "{85F544C8-62FE-4413-B880-39FA52BF1452}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C43F6558-FCAC-47F1-A8AC-FAC1F6FDCC2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C43F6558-FCAC-47F1-A8AC-FAC1F6FDCC2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C43F6558-FCAC-47F1-A8AC-FAC1F6FDCC2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C43F6558-FCAC-47F1-A8AC-FAC1F6FDCC2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20D0EEE4-B136-4750-851F-2B14EB23C746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20D0EEE4-B136-4750-851F-2B14EB23C746}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20D0EEE4-B136-4750-851F-2B14EB23C746}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20D0EEE4-B136-4750-851F-2B14EB23C746}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6344E2B-4E1A-4D01-9188-F423D7B75140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6344E2B-4E1A-4D01-9188-F423D7B75140}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6344E2B-4E1A-4D01-9188-F423D7B75140}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6344E2B-4E1A-4D01-9188-F423D7B75140}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B8C5B0F-08DD-4461-BA1A-093CC2AE76CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B8C5B0F-08DD-4461-BA1A-093CC2AE76CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B8C5B0F-08DD-4461-BA1A-093CC2AE76CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B8C5B0F-08DD-4461-BA1A-093CC2AE76CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D5D95DD-D0B2-4A4B-B1C9-76B8C1BAC6F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D5D95DD-D0B2-4A4B-B1C9-76B8C1BAC6F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D5D95DD-D0B2-4A4B-B1C9-76B8C1BAC6F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D5D95DD-D0B2-4A4B-B1C9-76B8C1BAC6F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FAB9DC6-F1A4-413C-B36B-95632C84A4D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FAB9DC6-F1A4-413C-B36B-95632C84A4D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FAB9DC6-F1A4-413C-B36B-95632C84A4D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FAB9DC6-F1A4-413C-B36B-95632C84A4D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85F544C8-62FE-4413-B880-39FA52BF1452}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85F544C8-62FE-4413-B880-39FA52BF1452}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85F544C8-62FE-4413-B880-39FA52BF1452}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85F544C8-62FE-4413-B880-39FA52BF1452}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
