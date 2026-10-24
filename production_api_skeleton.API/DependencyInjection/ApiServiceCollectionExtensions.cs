@@ -55,7 +55,7 @@ public static class ApiServiceCollectionExtensions
             .ValidateOnStart();
         
         //Singleton để dữ liệu in-memory tồn tại qua nhiều request
-        services.AddSingleton<WorkItemService, WorkItemServiceImplementation>();
+        services.AddScoped<WorkItemService, WorkItemServiceImplementation>();
         
         return services;   
     }

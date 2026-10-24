@@ -43,47 +43,46 @@ public class WorkItem: ApiEndpoint, ICarterModule
 
     }
     
-    private static IResult GetAll(WorkItemService service)
-    {
-        return Results.Ok(service.GetAll());
-    }
-    
-    private static IResult GetById(
-            Guid id,
-            WorkItemService service)
-        {
-            var result = service.GetById(id);
+    private static async Task<IResult> GetAll(WorkItemService service, CancellationToken cancellationToken) 
+    { 
+        var result = await service.GetAllAsync(cancellationToken); 
  
-            return result is null
-                ? NotFound(
-                    "WorkItem.NotFound",
-                    $"Work item '{id}' does not exist.")
-                : Results.Ok(result);
-        }
- 
-    private static IResult Create(
-        Request.CreateWorkItemRequest request,
-        WorkItemService service)
-    {
-        var result = service.Create(request);
-
-        return Results.Created(
-            $"/api/v1/work-items/{result.Id}",
-            result);
+        return Results.Ok(result);
     }
 
-    private static IResult UpdateStatus(
-        Guid id,
-        Request.UpdateWorkItemStatusRequest request,
-        WorkItemService service)
+    private static async Task<IResult> GetById(Guid id, WorkItemService service, CancellationToken cancellationToken)
     {
-        var result = service.UpdateStatus(id, request);
+        var result = await service.GetByIdAsync(id, cancellationToken);
 
         return result is null
             ? NotFound(
                 "WorkItem.NotFound",
                 $"Work item '{id}' does not exist.")
             : Results.Ok(result);
+    }
+
+    private static async Task<IResult> Create(Request.CreateWorkItemRequest request, WorkItemService service, CancellationToken cancellationToken) 
+          { 
+              var result = await service.CreateAsync( 
+                  request, 
+                  cancellationToken); 
+ 
+              return Results.Created( 
+                  $"/api/v1/work-items/{result.Id}", 
+                  result); 
+          }
+
+    private static async Task<IResult> UpdateStatus(Guid id, Request.UpdateWorkItemStatusRequest request, 
+                                                        WorkItemService service, 
+                                                        CancellationToken cancellationToken) 
+    { 
+        var result = await service.UpdateStatusAsync(id, request, cancellationToken); 
+ 
+        return result is null 
+            ? NotFound( 
+                "WorkItem.NotFound", 
+                $"Work item '{id}' does not exist.") 
+            : Results.Ok(result); 
     }
     
     
