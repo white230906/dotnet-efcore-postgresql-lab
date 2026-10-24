@@ -7,4 +7,8 @@ public interface IWorkItemRepository
     Task<WorkItem?> GetByIdAsync(Guid id, bool trackChanges, CancellationToken cancellationToken); 
  
     Task AddAsync(WorkItem workItem, CancellationToken cancellationToken);
+    
+    Task AddHistoryAsync(WorkItemStatusHistory history, CancellationToken cancellationToken); 
+ 
+    Task<IReadOnlyCollection<WorkItemStatusHistory>> GetHistoryAsync(Guid workItemId, CancellationToken cancellationToken);
 }

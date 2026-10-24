@@ -6,18 +6,19 @@ public class WorkItem
         Guid id,
         string title,
         WorkItemStatus status,
-        DateTimeOffset createAt)
+        DateTimeOffset createdAt)
     {
         Id = id;
         Title = title;
         Status = status;
-        CreatedAt = createAt;
+        CreatedAt = createdAt;
     }
     
     public Guid Id { get; }
     public string Title { get; private set; }
     public WorkItemStatus Status { get; private set; }
     public DateTimeOffset CreatedAt { get; }
+    public uint Version { get; private set; }
 
     public static WorkItem Create(string title, int maxTitleLength, DateTimeOffset createdAt)
     {

@@ -1,4 +1,5 @@
 using production_api_skeleton.API.DependencyInjection;
+using production_api_skeleton.Persistence.DependencyInjection;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,7 +25,11 @@ private static void ConfigureSerilog(
  */
 
 builder.Services.AddApiServices();
- 
+builder.Services.AddPostgreSqlPersistence( 
+    builder.Configuration, 
+    builder.Environment);
+
+
 var app = builder.Build(); 
 
 app.UseApiPipeline();
