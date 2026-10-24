@@ -75,7 +75,7 @@ public class Service: IService
             return ToResponse(item); 
         } 
         
-        _unitOfWork.BeginTransactionAsync(cancellationToken); 
+        await _unitOfWork.BeginTransactionAsync(cancellationToken);
  
         try 
         { 

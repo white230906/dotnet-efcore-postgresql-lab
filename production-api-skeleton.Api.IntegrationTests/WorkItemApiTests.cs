@@ -1,22 +1,20 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
 namespace production_api_skeleton.Api.IntegrationTests;
 
-public class WorkItemApiTests : IClassFixture<WebApplicationFactory<Program>>
+public class WorkItemApiTests :  IClassFixture<PostgreSqlFixture>
 {
     private const string BaseUrl = "/api/v1/work-items";
     private const string CorrelationHeader = "X-Correlation-ID";
     
     private readonly HttpClient _client;
 
-    public WorkItemApiTests(WebApplicationFactory<Program> factory)
+    public WorkItemApiTests(PostgreSqlFixture fixture)
     {
-        _client = factory.CreateClient();
+        _client = fixture.Client;
     }
     
     [Fact]
@@ -150,7 +148,8 @@ public class WorkItemApiTests : IClassFixture<WebApplicationFactory<Program>>
  
         var request = new
         {
-            Status = "InProgress"
+            Status = "InProgress",
+            Version = createdItem.Version
         };
  
         var response = await _client.PutAsJsonAsync(
@@ -175,7 +174,8 @@ public class WorkItemApiTests : IClassFixture<WebApplicationFactory<Program>>
  
         var request = new
         {
-            Status = "Completed"
+            Status = "Completed",
+            Version = createdItem.Version
         };
  
         var response = await _client.PutAsJsonAsync(
@@ -286,6 +286,7 @@ public class WorkItemApiTests : IClassFixture<WebApplicationFactory<Program>>
         Guid Id,
         string Title,
         string Status,
-        DateTime CreatedAt);
+        DateTime CreatedAt,
+        uint Version);
     
 }

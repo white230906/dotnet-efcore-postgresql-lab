@@ -8,7 +8,7 @@ namespace production_api_skeleton.Persistence.Repositories;
 public class EfUnitOfWork: IUnitOfWork, IAsyncDisposable
 {
     private readonly AppDbContext _dbContext;
-    private IDbContextTransaction _transaction;
+    private IDbContextTransaction? _transaction;
     //IDbContextTransaction là môt object đại diện cho một database transaction đang mở của EF Core.
     public EfUnitOfWork(AppDbContext dbContext)
     {
