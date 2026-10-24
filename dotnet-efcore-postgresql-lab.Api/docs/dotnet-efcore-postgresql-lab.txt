@@ -1,0 +1,39 @@
+dotnet-efcore-postgresql-lab
+
+Application
+    IService: khai báo các use case cho Presentation gọi
+    Service: xử lý luồng và gọi Domain logic
+
+Domain
+    IWorkItemRepository: khai báo các thao tác truy cập dữ liệu
+    WorkItemRepository: trong Persistence: dùng FE core để đọc/ghi dữ liệu
+
+Tránh nhầm lẫn giữ
+    IService: mô tả use case
+    IWorkItemRepository: mô tả theo tác truy cập dữ liệu
+
+Transaction: bao gồm 3 câu lệnh điển hình:
+- BeiginTransaction: nơi bắt đầu transaction và các thay đổi trong này mặc dù đã gọi SaveChange bao nhiêu lần đi nữa vẫn chưa được xác nhận cho đến khi commit
+
+- Commit: là một lời cam kết. Tức lúc này mọi chuyện đã ok và đã xuôn sẻ thì bắt đầu lưu vo db luôn
+
+- Rollback: cú backup thần thánh. Tức khi khi bắt đầu transaction và trước khi đến commit có bất cứ vấn đề gì xra thì đều bị xuống dưới này để rollback lại như cũ
+=> 3 anh này tạo nên một khối lệnh đi cùng nhau hoặc tất cả thành công hoặc không có gì thay đổi
+
+- Cách dùng chung:
+
+
+try
+{
+    // Thực hiện nhiều thao tác database
+
+    await unitOfWork.SaveChangesAsync(cancellationToken);
+    await unitOfWork.CommitAsync(cancellationToken);
+}
+catch
+{
+    await unitOfWork.RollbackAsync(CancellationToken.None);
+    throw;
+}
+
+-
