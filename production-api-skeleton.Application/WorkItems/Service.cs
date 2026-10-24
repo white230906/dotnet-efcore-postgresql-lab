@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using production_api_skeleton.Contract.WorkItems;
 using production_api_skeleton.Domain.Abstractions.Repositories;
+using production_api_skeleton.Domain.Exceptions;
 using production_api_skeleton.Domain.WorkItems;
 
 namespace production_api_skeleton.Application.WorkItems;
@@ -38,10 +39,7 @@ public class Service: IService
 
     public async Task<Response.WorkItemResponse> CreateAsync (Request.CreateWorkItemRequest request, CancellationToken cancellationToken)
     {
-        var item = WorkItem.Create(
-            request.Title,
-            _options.MaxTitleLength,
-            DateTimeOffset.UtcNow);
+        var item = WorkItem.Create(request.Title, _options.MaxTitleLength, DateTimeOffset.UtcNow);
  
         await _repository.AddAsync(item, cancellationToken);
         
@@ -59,17 +57,71 @@ public class Service: IService
         {
             return null;
         }
- 
-        var newStatus = ToDomainStatus(request.Status);
         
+        if (item.Version != request.Version) 
+        { 
+            throw new ConcurrencyConflictException("The work item was changed by another request. " + 
+                                                   "Reload the latest data and try again."); 
+        }
+        
+        var previousStatus = item.Status; 
+        var newStatus = ToDomainStatus(request.Status); 
+ 
         item.ChangeStatus(newStatus);
         
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        //Không thay đổi thật sự thì không tạo history. 
+        if (previousStatus == item.Status) 
+        { 
+            return ToResponse(item); 
+        } 
         
-        return ToResponse(item);
+        _unitOfWork.BeginTransactionAsync(cancellationToken); 
+ 
+        try 
+        { 
+            //Lưu trạng thái mới. 
+            // await _unitOfWork.SaveChangesAsync(cancellationToken); 
+ 
+            var history = WorkItemStatusHistory.Create( 
+                item.Id, 
+                previousStatus, 
+                item.Status, 
+                DateTimeOffset.UtcNow); 
+ 
+            await _repository.AddHistoryAsync(history, cancellationToken); 
+ 
+            // Lưu history. 
+            await _unitOfWork.SaveChangesAsync(cancellationToken); 
+ 
+            await _unitOfWork.CommitAsync(cancellationToken); 
+ 
+            return ToResponse(item); 
+        } 
+        catch 
+        { 
+            await _unitOfWork.RollbackAsync(CancellationToken.None); 
+ 
+            throw; 
+        }
         
     }
-    
+
+    public async Task<IReadOnlyCollection<Response.WorkItemStatusHistoryResponse>?> GetHistoryAsync(Guid workItemId, CancellationToken cancellationToken)
+    {
+        var workItem = await _repository.GetByIdAsync(workItemId, trackChanges: false, cancellationToken); 
+ 
+        if (workItem is null) 
+        { 
+            return null; 
+        } 
+ 
+        var histories = await _repository.GetHistoryAsync(workItemId, cancellationToken); 
+ 
+        return histories 
+            .Select(ToHistoryResponse) 
+            .ToArray();
+    }
+
     private static WorkItemStatus ToDomainStatus(
         Request.WorkItemStatusRequest status)
     {
@@ -97,6 +149,17 @@ public class Service: IService
             item.Id,
             item.Title,
             item.Status.ToString(),
-            item.CreatedAt.UtcDateTime);
+            item.CreatedAt.UtcDateTime,
+            item.Version);
+    }
+    
+    private static Response.WorkItemStatusHistoryResponse ToHistoryResponse(WorkItemStatusHistory history) 
+    { 
+        return new Response.WorkItemStatusHistoryResponse( 
+            history.Id, 
+            history.WorkItemId, 
+            history.PreviousStatus.ToString(), 
+            history.NewStatus.ToString(), 
+            history.ChangedAt.UtcDateTime); 
     }
 }

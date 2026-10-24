@@ -15,7 +15,7 @@ public class Request
     //      request cannot call Title
     
     public record CreateWorkItemRequest(string Title);    
-    public record UpdateWorkItemStatusRequest(WorkItemStatusRequest Status);
+    public record UpdateWorkItemStatusRequest(WorkItemStatusRequest Status, uint Version);
     
     public enum WorkItemStatusRequest 
     { 

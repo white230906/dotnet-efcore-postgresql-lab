@@ -39,7 +39,15 @@ public class WorkItem: ApiEndpoint, ICarterModule
             .WithName("UpdateWorkItemStatus")
             .Produces<Response.WorkItemResponse>()
             .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status409Conflict)
             .ProducesProblem(StatusCodes.Status422UnprocessableEntity);
+        
+        group.MapGet("{id:guid}/history", GetHistory) 
+            .WithName("GetWorkItemStatusHistory") 
+            .Produces< 
+                IReadOnlyCollection< 
+                    Response.WorkItemStatusHistoryResponse>>() 
+            .ProducesProblem(StatusCodes.Status404NotFound);
 
     }
     
@@ -85,5 +93,14 @@ public class WorkItem: ApiEndpoint, ICarterModule
             : Results.Ok(result); 
     }
     
-    
+    private static async Task<IResult> GetHistory(Guid id, WorkItemService service, CancellationToken cancellationToken) 
+    { 
+        var result = await service.GetHistoryAsync(id, cancellationToken); 
+ 
+        return result is null 
+            ? NotFound( 
+                "WorkItem.NotFound", 
+                $"Work item '{id}' does not exist.") 
+            : Results.Ok(result); 
+    }
 }

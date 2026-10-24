@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using production_api_skeleton.Domain.Exceptions;
 
 namespace production_api_skeleton.API.Middleware;
 
@@ -57,7 +58,12 @@ public class ExceptionHandlingMiddleware
                 StatusCodes.Status422UnprocessableEntity,
                 "Validation error",
                 "Request.ValidationFailed"),
- 
+            
+            ConcurrencyConflictException => ( 
+                StatusCodes.Status409Conflict, 
+                "Concurrency conflict", 
+                "WorkItem.ConcurrencyConflict"),
+            
             InvalidOperationException => (
                 StatusCodes.Status409Conflict,
                 "Business rule conflict",

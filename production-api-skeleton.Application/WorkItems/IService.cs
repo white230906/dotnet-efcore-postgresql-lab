@@ -11,4 +11,6 @@ public interface IService
     Task<Response.WorkItemResponse> CreateAsync(Request.CreateWorkItemRequest request, CancellationToken cancellationToken); 
  
     Task<Response.WorkItemResponse?> UpdateStatusAsync(Guid id, Request.UpdateWorkItemStatusRequest request, CancellationToken cancellationToken);
+    
+    Task<IReadOnlyCollection<Response.WorkItemStatusHistoryResponse>?> GetHistoryAsync(Guid workItemId, CancellationToken cancellationToken);
 }

@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using production_api_skeleton.Domain.Abstractions.Repositories;
+using production_api_skeleton.Domain.Exceptions;
 
 namespace production_api_skeleton.Persistence.Repositories;
 
@@ -23,9 +25,17 @@ public class EfUnitOfWork: IUnitOfWork, IAsyncDisposable
         //EF yêu cầu Postgres mở transaction và trả về mt object để chúng ta điều khiển transaction đó 
     }
 
-    public Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
     {
-        return _dbContext.SaveChangesAsync(cancellationToken);
+        try 
+        { 
+            return await _dbContext.SaveChangesAsync( 
+                cancellationToken); 
+        } 
+        catch (DbUpdateConcurrencyException exception) 
+        { 
+            throw new ConcurrencyConflictException("The data was changed by another request.", exception); 
+        }
     }
 
     public async Task CommitAsync(CancellationToken cancellationToken)
